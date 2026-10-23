@@ -1,0 +1,16 @@
+{
+  "_comment": "MEGO 產品規則的單一來源。後端 app/core/policy.py 讀取同目錄的本檔；前端以 constants 保留同一份數值，並由 Jest 測試比對本檔防止飄移。修改規則請只改這裡。",
+  "healthTrendRules": [
+    { "category": "water", "status": "low", "watchDays": 2, "continuedDays": 3 },
+    { "category": "water", "status": "high", "watchDays": 2, "continuedDays": 3 },
+    { "category": "food", "status": "low", "watchDays": 2, "continuedDays": 3 },
+    { "category": "food", "status": "high", "watchDays": 3, "continuedDays": null },
+    { "category": "energy", "status": "slightly_low", "watchDays": 2, "continuedDays": 3 },
+    { "category": "stool", "status": "hard", "watchDays": 2, "continuedDays": 3 },
+    { "category": "stool", "status": "soft", "watchDays": 2, "continuedDays": 3 },
+    { "category": "stool", "status": "watery", "watchDays": 1, "continuedDays": 2 }
+  ],
+  "attachmentLimits": { "weight": 3, "health_event": 5, "medical_visit": 10 },
+  "uploadMaxMb": 10,
+  "chatMessageMaxChars": 1000
+}

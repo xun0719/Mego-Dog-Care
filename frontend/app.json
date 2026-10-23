@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "MEGO",
+    "slug": "mego",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "org.name.myapp"
+    },
+    "android": {
+      "package": "com.myapp",
+      "allowBackup": false
+    },
+    "plugins": [
+      "expo-notifications",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "允許 MEGO 存取相簿，以選取毛孩照片或照護紀錄照片；只有你選取的照片會加入 App。",
+          "cameraPermission": "允許 MEGO 使用相機，拍攝毛孩照片或照護紀錄照片。",
+          "microphonePermission": false
+        }
+      ],
+      "expo-sharing",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "允許 MEGO 使用目前位置，協助你尋找附近的動物醫院。只有在你點選定位時才會詢問。"
+        }
+      ],
+      "expo-status-bar",
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/home-scene/logo-splash.png",
+          "imageWidth": 190,
+          "resizeMode": "contain",
+          "backgroundColor": "#F7F4EE"
+        }
+      ]
+    ]
+  }
+}

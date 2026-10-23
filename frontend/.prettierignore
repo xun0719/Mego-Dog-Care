@@ -1,0 +1,6 @@
+node_modules
+dist
+.expo
+
+# Lottie 動畫素材維持原始壓縮格式，不重排
+assets/artwork/**/*.json

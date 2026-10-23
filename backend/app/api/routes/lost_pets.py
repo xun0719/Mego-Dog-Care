@@ -1,0 +1,25 @@
+from fastapi import APIRouter, Query, Response
+from fastapi.responses import FileResponse, HTMLResponse
+from app.schemas.lost_pet import LostPetProfileRequest
+from app.services import lost_pet_service
+router=APIRouter(tags=['lost-pets'])
+@router.get('/pets/{pet_id}/lost-profile')
+def get_profile(pet_id:str,user_id:str=Query(alias='userId')):
+ profile=lost_pet_service.private(pet_id,user_id)
+ return {'success':True,'message':'取得協尋設定成功','data':{'profile':lost_pet_service.serialize_private(profile) if profile else None}}
+@router.put('/pets/{pet_id}/lost-profile')
+def save_profile(pet_id:str,data:LostPetProfileRequest,user_id:str=Query(alias='userId')):
+ return {'success':True,'message':'協尋設定已儲存','data':{'profile':lost_pet_service.save(pet_id,user_id,data)}}
+@router.post('/pets/{pet_id}/lost-profile/rotate-token')
+def rotate(pet_id:str,user_id:str=Query(alias='userId')):
+ return {'success':True,'message':'協尋連結已更新','data':lost_pet_service.rotate(pet_id,user_id)}
+@router.delete('/pets/{pet_id}/lost-profile',status_code=204)
+def disable(pet_id:str,user_id:str=Query(alias='userId')):lost_pet_service.disable(pet_id,user_id);return Response(status_code=204)
+@router.get('/public/lost-pets/{public_token}')
+def public_json(public_token:str):return lost_pet_service.public(public_token)
+@router.get('/public/lost-pets/{public_token}/avatar')
+def public_avatar(public_token:str):
+ path,mime_type=lost_pet_service.public_avatar(public_token)
+ return FileResponse(path,media_type=mime_type,headers={'Cache-Control':'private, no-store'})
+@router.get('/public/lost-pets/{public_token}/page',response_class=HTMLResponse)
+def public_page(public_token:str):return HTMLResponse(lost_pet_service.public_html(public_token))

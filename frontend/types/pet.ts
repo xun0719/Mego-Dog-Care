@@ -1,0 +1,67 @@
+export interface Pet {
+  id: string;
+  userId: string;
+  name: string;
+  species: 'dog' | 'cat' | 'other';
+  gender: 'male' | 'female';
+  breed?: string;
+  breedType?: 'purebred' | 'mixed' | 'unknown';
+  birthDate?: string;
+  adoptionDate?: string;
+  avatarAttachmentId?: string;
+  latestWeightKg?: number;
+  latestWeightAt?: string;
+  neutered: boolean;
+  allergies?: string;
+  chronicDiseases?: string;
+  microchipNumber?: string;
+  coatColor?: string;
+  distinctiveFeatures?: string;
+  /** 回憶模式：毛孩已離開，紀錄只供回顧，不能再新增。 */
+  memorial?: boolean;
+  passedAwayDate?: string;
+  memorialNote?: string;
+}
+export interface PetMemorialData {
+  passedAwayDate: string;
+  memorialNote: string;
+}
+export type PetFormData = Omit<Pet, 'id' | 'userId' | 'species' | 'gender'> & {
+  gender: 'male' | 'female' | '';
+  /** 僅表單暫存的裝置 URI；不會送進 Pet JSON 欄位。 */
+  avatarUri?: string;
+};
+/** 建立與編輯毛孩表單的相容型別；欄位名稱保留後端 API convention。 */
+export interface PetData {
+  _id?: string;
+  userId?: string;
+  name: string;
+  gender: 'male' | 'female' | '';
+  breed: string;
+  breedType: 'purebred' | 'mixed' | 'unknown';
+  avatarUri: string;
+  avatarAttachmentId?: string;
+  birthday: string;
+  arrivalDate: string;
+  neutered: boolean;
+  allergies: string;
+  chronicDiseases: string;
+  microchipNumber: string;
+  coatColor: string;
+  distinctiveFeatures: string;
+}
+export const emptyPetData: PetData = {
+  name: '',
+  gender: '',
+  breed: '',
+  breedType: 'unknown',
+  avatarUri: '',
+  birthday: '',
+  arrivalDate: '',
+  neutered: false,
+  allergies: '',
+  chronicDiseases: '',
+  microchipNumber: '',
+  coatColor: '',
+  distinctiveFeatures: '',
+};

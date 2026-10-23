@@ -1,0 +1,90 @@
+import type { TimelineItem, TimelineType } from '../../types';
+import {
+  addDateKeyDays,
+  localDateKey,
+  taipeiDateKey,
+  taipeiDayStart,
+} from '../../utils/taipeiDate';
+import { RECORD_CATEGORY_COLORS, RecordCategoryKey } from '../../constants/RecordCategoryColors';
+
+export type TimelineCategory = RecordCategoryKey;
+
+export const TIMELINE_CATEGORIES: Array<{
+  key: TimelineCategory;
+  label: string;
+  color: string;
+}> = [
+  { key: 'reminder', label: '提醒', color: RECORD_CATEGORY_COLORS.reminder },
+  { key: 'daily', label: '日常', color: RECORD_CATEGORY_COLORS.daily },
+  { key: 'health', label: '健康異常', color: RECORD_CATEGORY_COLORS.health },
+  { key: 'weight', label: '體重', color: RECORD_CATEGORY_COLORS.weight },
+  { key: 'care', label: '健康照護', color: RECORD_CATEGORY_COLORS.care },
+  { key: 'life', label: '其他', color: RECORD_CATEGORY_COLORS.life },
+];
+
+const CATEGORY_BY_TYPE: Record<TimelineType, TimelineCategory> = {
+  reminder_completed: 'reminder',
+  daily_log: 'daily',
+  health_event: 'health',
+  weight: 'weight',
+  medical_visit: 'care',
+  vaccination: 'care',
+  deworming: 'care',
+  medication: 'care',
+  life_event: 'life',
+};
+
+export function getTimelineCategory(type: TimelineType): TimelineCategory {
+  return CATEGORY_BY_TYPE[type] ?? 'life';
+}
+
+export function getLocalDateKey(date: Date): string {
+  return localDateKey(date);
+}
+
+export function getMonthRange(month: Date) {
+  const startKey = `${month.getFullYear()}-${String(month.getMonth() + 1).padStart(2, '0')}-01`;
+  const endKey = addDateKeyDays(
+    `${month.getFullYear()}-${String(month.getMonth() + 1).padStart(2, '0')}-${String(
+      new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate(),
+    ).padStart(2, '0')}`,
+    1,
+  );
+  return {
+    startAt: new Date(taipeiDayStart(startKey)).toISOString(),
+    endAt: new Date(taipeiDayStart(endKey)).toISOString(),
+  };
+}
+
+export function buildCalendarDays(month: Date): Date[] {
+  const firstDay = new Date(month.getFullYear(), month.getMonth(), 1);
+  const startOffset = firstDay.getDay();
+  const count = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
+  const cellCount = Math.ceil((startOffset + count) / 7) * 7;
+  const gridStart = new Date(month.getFullYear(), month.getMonth(), 1 - startOffset);
+  return Array.from(
+    { length: cellCount },
+    (_, index) =>
+      new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate() + index),
+  );
+}
+
+export function getItemsForLocalDate(items: TimelineItem[], date: Date): TimelineItem[] {
+  const key = getLocalDateKey(date);
+  return items
+    .filter((item) => {
+      const timestamp = new Date(item.occurredAt);
+      return Number.isFinite(timestamp.getTime()) && taipeiDateKey(timestamp) === key;
+    })
+    .sort(
+      (left, right) => new Date(left.occurredAt).getTime() - new Date(right.occurredAt).getTime(),
+    );
+}
+
+export function getTimelineCategoriesForDay(items: TimelineItem[]): TimelineCategory[] {
+  return [...new Set(items.map((item) => getTimelineCategory(item.type)))];
+}
+
+export function getTimelineCategoriesForTypes(types: TimelineType[]): TimelineCategory[] {
+  return [...new Set(types.map(getTimelineCategory))];
+}
