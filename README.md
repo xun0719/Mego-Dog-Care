@@ -241,8 +241,8 @@ MEGO 為大學畢業專題，由兩位正式專題組員共同參與需求規劃
 
 | 成員 | GitHub | 
 | --- | --- |
-| 你的姓名 | [@xun0719](https://github.com/xun0719) |
-| 隊友姓名 | [@7ccc940708](https://github.com/7ccc940708)|
+| 陳巧薰 | [@xun0719](https://github.com/xun0719) |
+| 鄭齊欣 | [@7ccc940708](https://github.com/7ccc940708)|
 
 ### 開發方式與技術協作
 
